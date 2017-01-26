@@ -81,3 +81,11 @@ static void callback_check_ws(byte status, word off, word len) {
   nextSeq += ether.getTcpPayloadLength();
 }
 
+void startStopMatch() {
+  ether.browseUrl(PSTR("/start-stop-match"), "", website, noOp);
+}
+
+static void noOp(byte status, word off, word len) {
+  // Serial.println("no op called");
+}
+

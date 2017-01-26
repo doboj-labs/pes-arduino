@@ -1,6 +1,6 @@
 /******************************************************
   Description: Extracted code related to the buttons
-  
+
   Website: www.codecentric.ba
   E-mail: bruno.raljic@codecentric.de
   Author: Bruno Raljic
@@ -11,14 +11,7 @@ void listenStartStop() {
   // currently it's just toggling status active/scheduled and reseting score
   if (isButtonPressed(start_stop_btn_pin)) {
     lcd.clear();
-    if (line_2 == status_scheduled)
-    { line_2 = status_active;
-    } else {
-      line_2 = status_scheduled;
-      home_score = 0;
-      away_score = 0;
-      updateSegmentDisplay();
-    }
+    startStopMatch();
   }
 }
 
