@@ -42,11 +42,11 @@ LiquidCrystal_I2C lcd(0x3f, 16, 2); // set the LCD address to "0x3f"(or "0x27") 
 const byte stbPin = 5;  //the segment display module STB pin connected to digital pin 5
 const byte clkPin = 6;  //the segment display module CLK pin connected to digital pin 6
 const byte dioPin = 7;  //the segment display module DIO pin connected to digital pin 7
-const byte start_stop_btn_pin = 8; // button for starting/stopping match
-const byte hs_btn_pin = 9; // button for home score
-const byte as_btn_pin = 10; // button for away score
-const byte hc_btn_pin = 11; // button for home cancel
-const byte ac_btn_pin = 12; // button for away cancel
+const byte start_stop_btn_pin = 0; // button for starting/stopping match
+const byte hs_btn_pin = 1; // button for home score
+const byte as_btn_pin = 2; // button for away score
+const byte hc_btn_pin = 3; // button for home cancel
+const byte ac_btn_pin = 4; // button for away cancel
 const byte score_pins[] = {hs_btn_pin, as_btn_pin, hc_btn_pin, ac_btn_pin};
 
 // LCD lines
