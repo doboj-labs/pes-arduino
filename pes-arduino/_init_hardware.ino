@@ -11,6 +11,7 @@ void  initHardware() {
   initLcd();
   initButtons();
   initSegmentDisplay();
+  initEthernet();
 }
 
 
@@ -38,3 +39,11 @@ void initSegmentDisplay() {
   sendCommand(0x8f);       //activate
   updateSegmentDisplay();
 }
+
+void initEthernet(){
+   ether.begin(sizeof Ethernet::buffer, mymac, 8);
+  ether.dhcpSetup();
+  ether.dnsLookup(website);
+  ether.persistTcpConnection(true);
+}
+
