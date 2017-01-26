@@ -1,31 +1,31 @@
 /*******************************************************************************
   File name: pes-arduino.ino
-  Description: This code runs a device which is used to 
-  automate the process of information transfer in our 
-  PES tournaments. 
+  Description: This code runs a device which is used to
+  automate the process of information transfer in our
+  PES tournaments.
 
   HARDWARE:
-  * 5 buttons 
+    5 buttons
     - start/stop
     - home score
     - away score
     - home cancel score
     - away cancel score
-  * LCD display to show additional information (current match, status msgs etc.)
-  * Segment display to display home/away score
+    LCD display to show additional information (current match, status msgs etc.)
+    Segment display to display home/away score
 
   WORKFLOW:
-  * After starting the device, webservice is called to check if connection 
+    After starting the device, webservice is called to check if connection
            is secured and to retrieve current match,
-  * Match can be on status SCHEDULED/ACTIVE,
-  * If status is active, users can press the score buttons 
+    Match can be on status SCHEDULED/ACTIVE,
+    If status is active, users can press the score buttons
            (to increase or decrease buttons),
-  * On every score button press, web service is called again 
+    On every score button press, web service is called again
            to trigger further actions,
-  * If score is 0, user can't decrease score,
-  * There is a timeout for updating score, if that timeout is reached, 
+    If score is 0, user can't decrease score,
+    There is a timeout for updating score, if that timeout is reached,
            web server is to be checked and device should be restarted
-  * Switching from status active to status scheduled will reset score to 0:0
+    Switching from status active to status scheduled will reset score to 0:0
 
   Website: www.codecentric.ba
   E-mail: bruno.raljic@codecentric.de
@@ -35,8 +35,10 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <ArduinoJson.h>
+#include <EtherCard.h>
 
 // Hardware related
+static byte mymac[] = { 0x74, 0x69, 0x69, 0x2D, 0x30, 0x31 }; // ethernet interface mac address, must be unique on the LAN
 const uint8_t digits[] = { 0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f }; // Representing 0 - 9
 LiquidCrystal_I2C lcd(0x3f, 16, 2); // set the LCD address to "0x3f"(or "0x27") for a 16 chars and 2 line display
 const byte stbPin = 5;  //the segment display module STB pin connected to digital pin 5
@@ -68,17 +70,29 @@ byte away_score = 0;
 int ms; // variable to keep milliseconds at specific point of time in execution
 const int sync_timeout = 60000; // 60 seconds
 
+// Ethernet / web
+#define BUFFERSIZE 400
+byte Ethernet::buffer[BUFFERSIZE];
+const char website[] PROGMEM = "doboj-labs-pes-api.herokuapp.com";
+int index_begin = -1;
+int index_end = -1;
+String response = "";
+uint32_t nextSeq;
+
 void setup(void)
 {
+  Serial.begin(57600);
   // init hardware
   initHardware();
 
   // init webservices
   checkWebStatus();
+
 }
 
 void loop(void)
 {
+  ether.packetLoop(ether.packetReceive());
   listenStartStop();
   listenScoreButtons();
   printLcd();

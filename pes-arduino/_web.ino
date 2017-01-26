@@ -25,51 +25,68 @@ boolean update_web_score(byte pin) {
   return random(2) > 0; //simulating true or false responsee
 }
 void checkWebStatus() {
+  ether.browseUrl(PSTR("/get-next-match"), "", website, callback_check_ws);
   // dummy implementation, should set teams in line 1 and status in line 2 if everything is ok,
   // otherwise set some error msg
 
-  ms = millis();
 
-  // Trying to initialize for specified amount of time, and then suggest
-  // device to be restarted (because server is inactive)
-  JsonObject& response = getCurrentMatch();
-  String resp_status = (const char*)response["status"];
-  while (resp_status == status_error) {
-    resp_status = (const char*)getCurrentMatch()["status"];
-    if (millis() - ms > sync_timeout) {
-      line_1 = status_sync_failed;
-      line_2 = status_restart;
-      lcd.clear();
-      return;
-    }
-  }
-
-  lcd.clear();
-  line_1 = (const char*)response["match"]; // casting to String
-  line_2 = (const char*)response["match_status"];
-
-
-
-  if (line_2 == status_active) {
-    home_score = response["home"];
-    away_score = response["away"];
-  } else if (line_2 == status_scheduled) {
-    home_score = 0;
-    away_score = 0;
-  }
 }
 
-JsonObject& getCurrentMatch() {
-  delay(random(2000));
-  // Agree on returning status
-  char response_1[] = "{\"status\":\"OK\",\"match\":\"MCU vs LIV\",\"match_status\":\"ACTIVE\",\"home\":3, \"away\":1}";
-  char response_2[] = "{\"status\":\"OK\",\"match\":\"BOR vs JUV\",\"match_status\":\"SCHEDULED!\",\"home\":0, \"away\":0}";
-  char response_3[] = "{\"status\":\"ERR\",\"err_msg\":\"something wrong\"}";
-  String responses[] = {response_1, response_2, response_3};
+// called when the client request is complete
+static void callback_check_ws(byte status, word off, word len) {
+
+  tmp_line = "";
 
 
-  StaticJsonBuffer<200> jsonBuffer;
-  JsonObject& root = jsonBuffer.parseObject(responses[random(3)]);
-  return root;
+  if (strncmp_P((char*) Ethernet::buffer + off, PSTR("HTTP"), 4) == 0) {
+    nextSeq = ether.getSequenceNumber();
+  }
+
+  if (nextSeq != ether.getSequenceNumber()) {
+    // Serial.print(F("<IGNORE DUPLICATE(?) PACKET>"));
+    return;
+  }
+
+  uint16_t payloadlength = ether.getTcpPayloadLength();
+  int16_t chunk_size   = BUFFERSIZE - off - 1;
+  int16_t char_written = 0;
+  int16_t char_in_buf  = chunk_size < payloadlength ? chunk_size : payloadlength;
+
+
+  while (char_written < payloadlength) {
+    // Serial.write((char*) Ethernet::buffer + off, char_in_buf);
+    tmp_line += (char*) Ethernet::buffer + off;
+    index_begin = tmp_line.indexOf("{\"response\":");
+    index_end = tmp_line.indexOf("}");
+    if (index_begin >= 0 && index_end >= 0) {
+      StaticJsonBuffer<200> jsonBuffer;
+      response = tmp_line.substring(index_begin, index_end + 1);
+      Serial.println(response);
+      JsonObject& responseJson = jsonBuffer.parseObject(response += "}");
+      responseJson.printTo(Serial);
+      lcd.clear();
+      // line_1 = (const char*)responseJson["response"]["match"]; // casting to String
+      line_2 = (const char*)responseJson["match_status"];
+      Serial.println("---");
+      Serial.println(line_1);
+
+
+
+      if (line_2 == status_active) {
+        home_score = responseJson["home"];
+        away_score = responseJson["away"];
+      } else if (line_2 == status_scheduled) {
+        home_score = 5;
+        away_score = 0;
+      }
+      home_score = 5;
+      away_score = 0;
+
+    }
+
+    char_written += char_in_buf;
+    char_in_buf = ether.readPacketSlice((char*) Ethernet::buffer + off, chunk_size, off + char_written);
+  }
+  nextSeq += ether.getTcpPayloadLength();
 }
 
