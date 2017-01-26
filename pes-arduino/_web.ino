@@ -26,10 +26,6 @@ boolean update_web_score(byte pin) {
 }
 void checkWebStatus() {
   ether.browseUrl(PSTR("/get-next-match"), "", website, callback_check_ws);
-  // dummy implementation, should set teams in line 1 and status in line 2 if everything is ok,
-  // otherwise set some error msg
-
-
 }
 
 // called when the client request is complete
@@ -87,5 +83,11 @@ void startStopMatch() {
 
 static void noOp(byte status, word off, word len) {
   // Serial.println("no op called");
+}
+
+void changeScoreWS(String changeScore){
+ char cx[40];
+  changeScore.toCharArray(cx, 40);
+   ether.browseUrl(PSTR(("/increment-decrement-score")), cx, website, noOp);
 }
 

@@ -38,24 +38,30 @@ void listenScoreButtons() {
       }
 
       // Check for which team to increase/decrease score
+      String changeScore;
       switch (pin) {
         case hs_btn_pin:
           home_score++;
+          changeScore = "?command=inc&team=home";
           break;
         case as_btn_pin:
           away_score++;
+          changeScore = "?command=inc&team=away";
           break;
         case hc_btn_pin:
           if (home_score > 0)
             home_score--;
+          changeScore = "?command=dec&team=home";
           break;
         case ac_btn_pin:
           if (away_score > 0)
             away_score--;
+          changeScore = "?command=dec&team=away";
           break;
       }
 
       updateSegmentDisplay();
+      changeScoreWS(changeScore);
       ms = millis();
       tmp_line = line_2;
 
