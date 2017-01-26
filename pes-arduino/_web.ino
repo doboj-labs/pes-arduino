@@ -44,7 +44,7 @@ void checkWebStatus() {
     }
   }
 
-
+  lcd.clear();
   line_1 = (const char*)response["match"]; // casting to String
   line_2 = (const char*)response["match_status"];
 
