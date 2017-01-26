@@ -60,27 +60,18 @@ static void callback_check_ws(byte status, word off, word len) {
     index_end = tmp_line.indexOf("}");
     if (index_begin >= 0 && index_end >= 0) {
       StaticJsonBuffer<200> jsonBuffer;
-      response = tmp_line.substring(index_begin, index_end + 1);
+      response = tmp_line.substring(index_begin + 13, index_end + 1);
       Serial.println(response);
-      JsonObject& responseJson = jsonBuffer.parseObject(response += "}");
+      JsonObject& responseJson = jsonBuffer.parseObject(response);
+
       responseJson.printTo(Serial);
       lcd.clear();
-      // line_1 = (const char*)responseJson["response"]["match"]; // casting to String
+      line_1 = (const char*)responseJson["match"]; // casting to String
       line_2 = (const char*)responseJson["match_status"];
-      Serial.println("---");
-      Serial.println(line_1);
 
+      home_score = responseJson["home"];
+      away_score = responseJson["away"];
 
-
-      if (line_2 == status_active) {
-        home_score = responseJson["home"];
-        away_score = responseJson["away"];
-      } else if (line_2 == status_scheduled) {
-        home_score = 5;
-        away_score = 0;
-      }
-      home_score = 5;
-      away_score = 0;
 
     }
 

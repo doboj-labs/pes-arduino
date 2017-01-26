@@ -57,8 +57,8 @@ String line_2;
 String tmp_line;
 
 // Status
-const char status_scheduled[] = "SCHEDULED!";
-const char status_active[] = "ACTIVE";
+const char status_scheduled[] = "scheduled";
+const char status_active[] = "active";
 const char status_sync[] = "SYNCING...";
 const char status_sync_failed[] = "SYNC FAILED";
 const char status_restart[] = "PLEASE RESTART";
