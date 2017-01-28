@@ -7,35 +7,50 @@
   Author: Bruno Raljic
   Date: 2017-01-23
 ******************************************************/
-boolean update_web_score(byte pin) {
-  // placeholder method, do it later
-  // it should check which pin (home/away or home_cancel/away_cancel) is used in method and update score on the server according to actions that pin represents
-  // return true if everything is ok and false if there is some error
-
-  line_2 = status_sync;
-
-
-  lcd.clear();
-  printLcd();
-  delay(500);
-  return random(2) > 0; //simulating true or false responsee
+boolean update_web_score(int request_id) {
+  makeRequest(request_id);
+  checkWebStatus();
+  return true;
 }
 void checkWebStatus() {
-  StaticJsonBuffer<200> jsonBuffer;
-  response_line =0;
-  Serial.print("connecting to ");
-  Serial.println(host);
+  makeRequest(WS_GET_CURRENT_MATCH);
+}
 
-  // Use WiFiClient class to create TCP connections
-  WiFiClient client;
-  const int httpPort = 80;
+void startStopMatch() {
+  makeRequest(WS_START_STOP_MATCH);
+  checkWebStatus();
+}
+
+void makeRequest(int request_id) {
+  response_line = 0;
+
   if (!client.connect(host, httpPort)) {
-    Serial.println("connection failed");
+    line_2 = "connection failed";
     return;
   }
 
-  // We now create a URI for the request
-  String url = "/get-next-match";
+  String url;
+  switch (request_id) {
+    case WS_GET_CURRENT_MATCH:
+      url = "/get-next-match";
+      break;
+    case WS_START_STOP_MATCH:
+      url = "/start-stop-match";
+      break;
+    case WS_INCREASE_HOME:
+      url = "/increment-decrement-score?command=inc&team=home";
+      break;
+    case WS_INCREASE_AWAY:
+      url = "/increment-decrement-score?command=inc&team=away";
+      break;
+    case WS_DECRESASE_HOME:
+      url = "/increment-decrement-score?command=dec&team=home";
+      break;
+    case WS_DECRESASE_AWAY:
+      url = "/increment-decrement-score?command=dec&team=away";
+      break;
+
+  }
 
   // This will send the request to the server
   client.print(String("GET ") + url + " HTTP/1.1\r\n" +
@@ -44,40 +59,30 @@ void checkWebStatus() {
   unsigned long timeout = millis();
   while (client.available() == 0) {
     if (millis() - timeout > 5000) {
-      Serial.println(">>> Client Timeout !");
+      line_2 = "Client Timeout !";
       client.stop();
       return;
     }
   }
 
-  // Read all the lines of the reply from server and print them to Serial
   while (client.available()) {
     String line = client.readStringUntil('\r');
-    if (response_line == 12) {
-      Serial.println("Processing response");
+    if ((response_line == 12) && (request_id == WS_GET_CURRENT_MATCH)) {
       response = line;
+      StaticJsonBuffer<200> jsonBuffer;
       JsonObject& responseJson = jsonBuffer.parseObject(response)["response"];
       line_1 = (const char*)responseJson["match"];
       line_2 = (const char*)responseJson["match_status"];
+      if (line_1 == "") {
+        line_1 = welcome;
+        line_2 = version;
+      }
       home_score = responseJson["home"];
       away_score = responseJson["away"];
     }
 
     response_line++;
   }
-  lcd.clear();
 
-}
-
-
-
-void startStopMatch() {
-  // implement via WiFI
-}
-
-
-
-void changeScoreWS(String changeScore){
- // implement via WiFI
 }
 

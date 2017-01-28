@@ -7,10 +7,7 @@
   Date: 2017-01-23
 ******************************************************/
 void listenStartStop() {
-  // dummy implementation, should call web server to check the status
-  // currently it's just toggling status active/scheduled and reseting score
   if (isButtonPressed(start_stop_btn_pin)) {
-    lcd.clear();
     startStopMatch();
   }
 }
@@ -26,24 +23,23 @@ void listenScoreButtons() {
     // Check first if button is pressed
     if (isButtonPressed(pin)) {
       // Check for which team to increase/decrease score
-      String changeScore;
+      int request_id;
       switch (pin) {
         case hs_btn_pin:
           home_score++;
-          changeScore = "?command=inc&team=home";
+          request_id = WS_INCREASE_HOME;
           break;
         case as_btn_pin:
           away_score++;
-          changeScore = "?command=inc&team=away";
+          request_id = WS_INCREASE_AWAY;
           break;
+          //Continue for other pins
       }
-      changeScoreWS(changeScore);
-      ms = millis();
-      tmp_line = line_2;
 
+      ms = millis();
       // Trying to update web score for specified amount of time, and then suggest
       // device to be restarted (because server is inactive)
-      while (!update_web_score(pin)) {
+      while (!update_web_score(request_id)) {
         if (millis() - ms > sync_timeout) {
           line_1 = status_sync_failed;
           line_2 = status_restart;
@@ -51,9 +47,6 @@ void listenScoreButtons() {
         }
 
       }
-      line_2 = tmp_line; // revert line 2 to previous state (before syncing)
-      lcd.clear();
-
     }
   }
 

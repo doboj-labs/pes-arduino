@@ -45,11 +45,19 @@ const byte start_stop_btn_pin = 10; // button for starting/stopping match
 const byte score_pins[] = {hs_btn_pin, as_btn_pin};
 
 // WiFi/Web
+WiFiClient client;
+const int httpPort = 80;
 const char* ssid     = "*";
 const char* password = "*";
 const char* host = "doboj-labs-pes-api.herokuapp.com";
 String response;
 int response_line = 0;
+const int WS_GET_CURRENT_MATCH = 0;
+const int WS_START_STOP_MATCH = 1;
+const int WS_INCREASE_HOME = 2;
+const int WS_INCREASE_AWAY = 3;
+const int WS_DECRESASE_HOME = 4;
+const int WS_DECRESASE_AWAY = 5;
 
 // LCD lines
 String line_1;
@@ -65,25 +73,26 @@ const char status_restart[] = "PLEASE RESTART";
 const char status_revert[] = "REVERTING...";
 const char status_error[] = "ERR";
 const char welcome[] = "Welcome!";
-const char version[] = "pes-arduino v0.1";
+const char version[] = "pes-arduino v0.2";
 
 byte home_score = 0;
 byte away_score = 0;
 int ms; // variable to keep milliseconds at specific point of time in execution
 const int sync_timeout = 60000; // 60 seconds
 
+
 void setup(void)
 {
-   Serial.begin(250000);
+  Serial.begin(250000);
 
   // init hardware
   initHardware();
- 
 
   // init webservices
   checkWebStatus();
-  
 
+
+  // ms = millis(); // for butonlessTest
 }
 
 void loop(void)
@@ -91,8 +100,24 @@ void loop(void)
   printLcd();
   //listenStartStop();
   //listenScoreButtons();
+
+  // buttonlessTest();
 }
 
+void buttonlessTest() {
+
+  if (millis() - ms > 4000) {
+
+    Serial.println("next call");
+    int random_id = random(6);
+    if (random_id < 2) {
+      startStopMatch();
+    } else if (random_id > 1) {
+      update_web_score(random_id);
+    }
+    ms = millis();
+  }
+}
 
 
 

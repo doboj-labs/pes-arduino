@@ -8,10 +8,9 @@
   Date: 2017-01-23
 ******************************************************/
 void  initHardware() {
-   initWifi();
   initLcd();
+   initWifi();
   // initButtons();
-  Serial.println("init hw finished");
 }
 
 
@@ -31,18 +30,10 @@ void initButtons() {
 }
 
 void initWifi() {
-  Serial.print("\nConnecting to ");
-  Serial.println(ssid);
-
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(".");
   }
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
 }
 
