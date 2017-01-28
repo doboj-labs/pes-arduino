@@ -1,13 +1,13 @@
 /*******************************************************
   Description: Extracted code related to the LCD display
-  
+
   Website: www.codecentric.ba
   E-mail: bruno.raljic@codecentric.de
   Author: Bruno Raljic
   Date: 2017-01-23
 *******************************************************/
 void printLcd() {
-  if (!(line_1 == welcome || line_1 == status_sync_failed)) {
+  if (!(line_1 == welcome || line_1 == status_label)) {
     lcd.setCursor(0, 0);
     lcd.print(home_score);
     if (away_score > 9) {

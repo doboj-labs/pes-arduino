@@ -50,7 +50,6 @@ const int httpPort = 80;
 const char* ssid     = "*";
 const char* password = "*";
 const char* host = "doboj-labs-pes-api.herokuapp.com";
-String response;
 int response_line = 0;
 const int WS_GET_CURRENT_MATCH = 0;
 const int WS_START_STOP_MATCH = 1;
@@ -62,23 +61,16 @@ const int WS_DECRESASE_AWAY = 5;
 // LCD lines
 String line_1;
 String line_2;
-String tmp_line;
 
 // Status
-const char status_scheduled[] = "scheduled";
 const char status_active[] = "active";
-const char status_sync[] = "SYNCING...";
-const char status_sync_failed[] = "SYNC FAILED";
-const char status_restart[] = "PLEASE RESTART";
-const char status_revert[] = "REVERTING...";
-const char status_error[] = "ERR";
+const char status_label[] = "Status";
 const char welcome[] = "Welcome!";
 const char version[] = "pes-arduino v0.2";
 
 byte home_score = 0;
 byte away_score = 0;
 int ms; // variable to keep milliseconds at specific point of time in execution
-const int sync_timeout = 60000; // 60 seconds
 
 
 void setup(void)
@@ -89,8 +81,7 @@ void setup(void)
   initHardware();
 
   // init webservices
-  checkWebStatus();
-
+  getCurrentMatch();
 
   // ms = millis(); // for butonlessTest
 }

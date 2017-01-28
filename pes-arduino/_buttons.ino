@@ -35,18 +35,7 @@ void listenScoreButtons() {
           break;
           //Continue for other pins
       }
-
-      ms = millis();
-      // Trying to update web score for specified amount of time, and then suggest
-      // device to be restarted (because server is inactive)
-      while (!update_web_score(request_id)) {
-        if (millis() - ms > sync_timeout) {
-          line_1 = status_sync_failed;
-          line_2 = status_restart;
-          break;
-        }
-
-      }
+      update_web_score(request_id);
     }
   }
 

@@ -9,7 +9,7 @@
 ******************************************************/
 void  initHardware() {
   initLcd();
-   initWifi();
+  initWifi();
   // initButtons();
 }
 
@@ -34,6 +34,10 @@ void initWifi() {
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
+    line_1 = status_label;
+    line_2 = "init wifi...";
+    lcd.clear();
+    printLcd();
   }
 }
 
