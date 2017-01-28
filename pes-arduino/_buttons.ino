@@ -59,8 +59,6 @@ void listenScoreButtons() {
           changeScore = "?command=dec&team=away";
           break;
       }
-
-      updateSegmentDisplay();
       changeScoreWS(changeScore);
       ms = millis();
       tmp_line = line_2;

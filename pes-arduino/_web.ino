@@ -68,7 +68,7 @@ static void callback_check_ws(byte status, word off, word len) {
       home_score = responseJson["home"];
       away_score = responseJson["away"];
 
-      updateSegmentDisplay();
+   
     }
 
     char_written += char_in_buf;

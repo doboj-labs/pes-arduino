@@ -12,7 +12,7 @@
     - home cancel score
     - away cancel score
     LCD display to show additional information (current match, status msgs etc.)
-    Segment display to display home/away score
+    - Arduino UNO D1 (wifi integrated)
 
   WORKFLOW:
     After starting the device, webservice is called to check if connection
@@ -39,11 +39,7 @@
 
 // Hardware related
 static byte mymac[] = { 0x74, 0x69, 0x69, 0x2D, 0x30, 0x31 }; // ethernet interface mac address, must be unique on the LAN
-const uint8_t digits[] = { 0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f }; // Representing 0 - 9
 LiquidCrystal_I2C lcd(0x3f, 16, 2); // set the LCD address to "0x3f"(or "0x27") for a 16 chars and 2 line display
-const byte stbPin = 5;  //the segment display module STB pin connected to digital pin 5
-const byte clkPin = 6;  //the segment display module CLK pin connected to digital pin 6
-const byte dioPin = 7;  //the segment display module DIO pin connected to digital pin 7
 const byte start_stop_btn_pin = 0; // button for starting/stopping match
 const byte hs_btn_pin = 1; // button for home score
 const byte as_btn_pin = 2; // button for away score

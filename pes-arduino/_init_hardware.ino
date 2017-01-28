@@ -10,7 +10,6 @@
 void  initHardware() {
   initLcd();
   initButtons();
-  initSegmentDisplay();
   initWifi();
 }
 
@@ -30,14 +29,6 @@ void initButtons() {
   pinMode(as_btn_pin, INPUT);
   pinMode(hc_btn_pin, INPUT);
   pinMode(ac_btn_pin, INPUT);
-}
-
-void initSegmentDisplay() {
-  pinMode(stbPin, OUTPUT); //initialize the stbPin as an output
-  pinMode(clkPin, OUTPUT); //initialize the clkPin as an output
-  pinMode(dioPin, OUTPUT); //initialize the dioPin as an output
-  sendCommand(0x8f);       //activate
-  updateSegmentDisplay();
 }
 
 void initWifi() {
