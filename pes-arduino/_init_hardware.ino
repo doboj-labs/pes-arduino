@@ -28,8 +28,6 @@ void initButtons() {
   pinMode(start_stop_btn_pin, INPUT_PULLUP);
   pinMode(hs_btn_pin, INPUT_PULLUP);
   pinMode(as_btn_pin, INPUT_PULLUP);
-  pinMode(hc_btn_pin, INPUT_PULLUP);
-  pinMode(ac_btn_pin, INPUT_PULLUP);
 }
 
 void initWifi() {

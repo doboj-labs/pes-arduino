@@ -40,11 +40,9 @@
 // Hardware related
 LiquidCrystal_I2C lcd(0x3f, 16, 2); // set the LCD address to "0x3f"(or "0x27") for a 16 chars and 2 line display
 const byte hs_btn_pin = 2; // button for home score
-const byte as_btn_pin = 3; // button for away score
-const byte hc_btn_pin =4; // button for home cancel
-const byte ac_btn_pin =5 ; // button for away cancel
+const byte as_btn_pin = 5; // button for away score
 const byte start_stop_btn_pin = 10; // button for starting/stopping match
-const byte score_pins[] = {hs_btn_pin, as_btn_pin, hc_btn_pin, ac_btn_pin};
+const byte score_pins[] = {hs_btn_pin, as_btn_pin};
 
 // WiFi/Web
 const char* ssid     = "*";

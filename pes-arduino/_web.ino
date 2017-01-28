@@ -12,12 +12,8 @@ boolean update_web_score(byte pin) {
   // it should check which pin (home/away or home_cancel/away_cancel) is used in method and update score on the server according to actions that pin represents
   // return true if everything is ok and false if there is some error
 
-  if (pin == hc_btn_pin || pin == ac_btn_pin) {
-    line_2 = status_revert;
-  } else {
     line_2 = status_sync;
 
-  }
 
   lcd.clear();
   printLcd();

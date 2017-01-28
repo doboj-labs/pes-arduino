@@ -23,20 +23,8 @@ void listenScoreButtons() {
 
   for (byte b = 0; b < 4; b++) {
     byte  pin = score_pins[b];
-    if (b == 0 || b == 2) {
-      //I'm using only 2 out of 4 buttons, so two pins have to be skipped
-      // Otherwise, blank lcd will appear
-      // 0 - HS, 1 - AS, 2 - HC, 3 - AC
-      continue;
-    }
-
     // Check first if button is pressed
     if (isButtonPressed(pin)) {
-      if ((pin == hc_btn_pin && home_score == 0) || (pin == ac_btn_pin && away_score == 0)) {
-        // No need for any action if score is 0 and you want to decrease it
-        continue;
-      }
-
       // Check for which team to increase/decrease score
       String changeScore;
       switch (pin) {
@@ -47,16 +35,6 @@ void listenScoreButtons() {
         case as_btn_pin:
           away_score++;
           changeScore = "?command=inc&team=away";
-          break;
-        case hc_btn_pin:
-          if (home_score > 0)
-            home_score--;
-          changeScore = "?command=dec&team=home";
-          break;
-        case ac_btn_pin:
-          if (away_score > 0)
-            away_score--;
-          changeScore = "?command=dec&team=away";
           break;
       }
       changeScoreWS(changeScore);
