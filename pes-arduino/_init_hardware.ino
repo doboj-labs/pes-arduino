@@ -8,9 +8,9 @@
   Date: 2017-01-23
 ******************************************************/
 void  initHardware() {
-  // initWifi();
+   initWifi();
   initLcd();
-  initButtons();
+  // initButtons();
   Serial.println("init hw finished");
 }
 
@@ -31,7 +31,7 @@ void initButtons() {
 }
 
 void initWifi() {
-  Serial.print("Connecting to ");
+  Serial.print("\nConnecting to ");
   Serial.println(ssid);
 
   WiFi.begin(ssid, password);

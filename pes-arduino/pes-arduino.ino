@@ -47,6 +47,9 @@ const byte score_pins[] = {hs_btn_pin, as_btn_pin};
 // WiFi/Web
 const char* ssid     = "*";
 const char* password = "*";
+const char* host = "doboj-labs-pes-api.herokuapp.com";
+String response;
+int response_line = 0;
 
 // LCD lines
 String line_1;
@@ -71,7 +74,7 @@ const int sync_timeout = 60000; // 60 seconds
 
 void setup(void)
 {
-  // Serial.begin(250000);
+   Serial.begin(250000);
 
   // init hardware
   initHardware();
@@ -79,6 +82,7 @@ void setup(void)
 
   // init webservices
   checkWebStatus();
+  
 
 }
 
