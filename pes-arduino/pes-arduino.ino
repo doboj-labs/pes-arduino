@@ -35,10 +35,8 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <ArduinoJson.h>
-#include <EtherCard.h>
 
 // Hardware related
-static byte mymac[] = { 0x74, 0x69, 0x69, 0x2D, 0x30, 0x31 }; // ethernet interface mac address, must be unique on the LAN
 LiquidCrystal_I2C lcd(0x3f, 16, 2); // set the LCD address to "0x3f"(or "0x27") for a 16 chars and 2 line display
 const byte start_stop_btn_pin = 0; // button for starting/stopping match
 const byte hs_btn_pin = 1; // button for home score
@@ -66,15 +64,6 @@ byte away_score = 0;
 int ms; // variable to keep milliseconds at specific point of time in execution
 const int sync_timeout = 60000; // 60 seconds
 
-// Ethernet / web
-#define BUFFERSIZE 400
-byte Ethernet::buffer[BUFFERSIZE];
-const char website[] PROGMEM = "doboj-labs-pes-api.herokuapp.com";
-int index_begin = -1;
-int index_end = -1;
-String response = "";
-uint32_t nextSeq;
-
 void setup(void)
 {
   Serial.begin(57600);
@@ -88,7 +77,6 @@ void setup(void)
 
 void loop(void)
 {
-  ether.packetLoop(ether.packetReceive());
   listenStartStop();
   listenScoreButtons();
   printLcd();
