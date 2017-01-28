@@ -1,7 +1,7 @@
 /******************************************************
   Description: Extracted code related to the hardware
   initialization.
-  
+
   Website: www.codecentric.ba
   E-mail: bruno.raljic@codecentric.de
   Author: Bruno Raljic
@@ -11,7 +11,7 @@ void  initHardware() {
   initLcd();
   initButtons();
   initSegmentDisplay();
-  initEthernet();
+  initWifi();
 }
 
 
@@ -40,10 +40,19 @@ void initSegmentDisplay() {
   updateSegmentDisplay();
 }
 
-void initEthernet(){
-   ether.begin(sizeof Ethernet::buffer, mymac, 8);
-  ether.dhcpSetup();
-  ether.dnsLookup(website);
-  ether.persistTcpConnection(true);
+void initWifi() {
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
 }
 
