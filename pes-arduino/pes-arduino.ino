@@ -35,15 +35,20 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <ArduinoJson.h>
+#include <ESP8266WiFi.h>
 
 // Hardware related
 LiquidCrystal_I2C lcd(0x3f, 16, 2); // set the LCD address to "0x3f"(or "0x27") for a 16 chars and 2 line display
-const byte start_stop_btn_pin = 0; // button for starting/stopping match
-const byte hs_btn_pin = 1; // button for home score
-const byte as_btn_pin = 2; // button for away score
-const byte hc_btn_pin = 3; // button for home cancel
-const byte ac_btn_pin = 4; // button for away cancel
+const byte hs_btn_pin = 2; // button for home score
+const byte as_btn_pin = 3; // button for away score
+const byte hc_btn_pin =4; // button for home cancel
+const byte ac_btn_pin =5 ; // button for away cancel
+const byte start_stop_btn_pin = 10; // button for starting/stopping match
 const byte score_pins[] = {hs_btn_pin, as_btn_pin, hc_btn_pin, ac_btn_pin};
+
+// WiFi/Web
+const char* ssid     = "*";
+const char* password = "*";
 
 // LCD lines
 String line_1;
@@ -58,6 +63,8 @@ const char status_sync_failed[] = "SYNC FAILED";
 const char status_restart[] = "PLEASE RESTART";
 const char status_revert[] = "REVERTING...";
 const char status_error[] = "ERR";
+const char welcome[] = "Welcome!";
+const char version[] = "pes-arduino v0.1";
 
 byte home_score = 0;
 byte away_score = 0;
@@ -66,9 +73,11 @@ const int sync_timeout = 60000; // 60 seconds
 
 void setup(void)
 {
-  Serial.begin(57600);
+  // Serial.begin(250000);
+
   // init hardware
   initHardware();
+ 
 
   // init webservices
   checkWebStatus();
@@ -77,9 +86,9 @@ void setup(void)
 
 void loop(void)
 {
-  listenStartStop();
-  listenScoreButtons();
   printLcd();
+  //listenStartStop();
+  //listenScoreButtons();
 }
 
 

@@ -8,9 +8,10 @@
   Date: 2017-01-23
 ******************************************************/
 void  initHardware() {
+  // initWifi();
   initLcd();
   initButtons();
-  initWifi();
+  Serial.println("init hw finished");
 }
 
 
@@ -18,17 +19,17 @@ void  initHardware() {
 void initLcd() {
   lcd.init();
   lcd.backlight();
-  line_1 = "Welcome!";
-  line_2 = "pes-arduino v0.1";
+  line_1 = welcome;
+  line_2 = version;
   printLcd();
 }
 
 void initButtons() {
-  pinMode(start_stop_btn_pin, INPUT);
-  pinMode(hs_btn_pin, INPUT);
-  pinMode(as_btn_pin, INPUT);
-  pinMode(hc_btn_pin, INPUT);
-  pinMode(ac_btn_pin, INPUT);
+  pinMode(start_stop_btn_pin, INPUT_PULLUP);
+  pinMode(hs_btn_pin, INPUT_PULLUP);
+  pinMode(as_btn_pin, INPUT_PULLUP);
+  pinMode(hc_btn_pin, INPUT_PULLUP);
+  pinMode(ac_btn_pin, INPUT_PULLUP);
 }
 
 void initWifi() {

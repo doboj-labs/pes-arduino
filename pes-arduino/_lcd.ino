@@ -7,8 +7,7 @@
   Date: 2017-01-23
 *******************************************************/
 void printLcd() {
-  // This if block will be removed, since home/away score wont be on lcd
-  if (!(line_1 == "Welcome!" || line_1 == status_sync_failed)) {
+  if (!(line_1 == welcome || line_1 == status_sync_failed)) {
     lcd.setCursor(0, 0);
     lcd.print(home_score);
     if (away_score > 9) {
