@@ -39,10 +39,12 @@
 
 // Hardware related
 LiquidCrystal_I2C lcd(0x3f, 16, 2); // set the LCD address to "0x3f"(or "0x27") for a 16 chars and 2 line display
-const byte hs_btn_pin = 2; // button for home score
-const byte as_btn_pin = 5; // button for away score
+const byte hs_btn_pin = 13; // button for home score
+const byte as_btn_pin = 14; // button for away score
+const byte hs_btn_cancel_pin=12; // button for home score cancel
+const byte as_btn_cancel_pin=15; // button for home score cancel
 const byte start_stop_btn_pin = A0; // button for starting/stopping match
-const byte score_pins[] = {hs_btn_pin, as_btn_pin};
+const byte score_pins[] = {hs_btn_pin, as_btn_pin, hs_btn_cancel_pin, as_btn_cancel_pin};
 
 // WiFi/Web
 WiFiClient client;
@@ -55,8 +57,8 @@ const int WS_GET_CURRENT_MATCH = 0;
 const int WS_START_STOP_MATCH = 1;
 const int WS_INCREASE_HOME = 2;
 const int WS_INCREASE_AWAY = 3;
-const int WS_DECRESASE_HOME = 4;
-const int WS_DECRESASE_AWAY = 5;
+const int WS_DECREASE_HOME = 4;
+const int WS_DECREASE_AWAY = 5;
 
 // LCD lines
 String line_1;
@@ -90,5 +92,5 @@ void loop(void)
 {
   printLcd();
   listenStartStop();
-  //listenScoreButtons();
+  listenScoreButtons();
 }

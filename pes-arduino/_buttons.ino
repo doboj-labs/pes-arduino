@@ -16,10 +16,10 @@ void listenStartStop() {
 void listenScoreButtons() {
   // Score can be changed only when the match is active
   if (line_2 != status_active) {
-    return;
+   // return;
   }
 
-  for (byte b = 0; b < 2; b++) {
+  for (byte b = 0; b < 4; b++) {
     byte  pin = score_pins[b];
     // Check first if button is pressed
     if (isButtonPressed(pin)) {
@@ -29,12 +29,27 @@ void listenScoreButtons() {
         case hs_btn_pin:
           home_score++;
           request_id = WS_INCREASE_HOME;
+          Serial.print("home score ");
+          Serial.println(home_score);
           break;
         case as_btn_pin:
           away_score++;
           request_id = WS_INCREASE_AWAY;
+          Serial.print("away score");
+          Serial.println(away_score);
           break;
-          //Continue for other pins
+        case hs_btn_cancel_pin:
+          home_score--;
+          request_id = WS_DECREASE_HOME;
+          Serial.print("home cancel");
+          Serial.println(home_score);
+          break;
+        case as_btn_cancel_pin:
+          away_score--;
+          request_id = WS_DECREASE_AWAY;
+          Serial.print("away cancel");
+          Serial.println(away_score);
+          break;
       }
      // update_web_score(request_id);
     }
@@ -62,7 +77,7 @@ boolean readPressedAsBoolean(int pin){
   if(pin==start_stop_btn_pin){
     return analogRead(pin) > 800;
   }else{
-    return digitalRead(pin)==LOW;
+    return digitalRead(pin)==HIGH;
   }
 }
 

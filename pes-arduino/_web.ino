@@ -44,10 +44,10 @@ void makeRequest(int request_id) {
     case WS_INCREASE_AWAY:
       url = "/increment-decrement-score?command=inc&team=away";
       break;
-    case WS_DECRESASE_HOME:
+    case WS_DECREASE_HOME:
       url = "/increment-decrement-score?command=dec&team=home";
       break;
-    case WS_DECRESASE_AWAY:
+    case WS_DECREASE_AWAY:
       url = "/increment-decrement-score?command=dec&team=away";
       break;
 
