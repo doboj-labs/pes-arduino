@@ -7,7 +7,7 @@
   Date: 2017-01-23
 ******************************************************/
 void listenStartStop() {
-  if (isAnalogButtonPressed(start_stop_btn_pin)) {
+  if (isButtonPressed(start_stop_btn_pin)) {
     //startStopMatch();
     Serial.println("start/stop");
   }
@@ -42,15 +42,15 @@ void listenScoreButtons() {
 
 }
 
-boolean isAnalogButtonPressed(int pin) {
-  if (analogRead(pin) >800)       //Detection button interface to low
+boolean isButtonPressed(int pin) {
+  if (readPressedAsBoolean(pin))       //Detection button interface to low
   {
     delay(10);                        //Delay 10ms for the elimination of key leading-edge jitter
-    if (analogRead(pin) >800)   //Confirm button is pressed
+    if (readPressedAsBoolean(pin))   //Confirm button is pressed
     {
-      while (analogRead(pin) >800); //Wait for key interfaces to low
+      while (readPressedAsBoolean(pin)); //Wait for key interfaces to low
       delay(10);                      //delay 10ms for the elimination of key trailing-edge jitter
-      while (analogRead(pin) >800); //Confirm button press
+      while (readPressedAsBoolean(pin)); //Confirm button press
       return true;
     }
   } else {
@@ -58,18 +58,11 @@ boolean isAnalogButtonPressed(int pin) {
   }
 }
 
-boolean isButtonPressed(int pin) {
-  if (digitalRead(pin) == LOW)       //Detection button interface to low
-  {
-    delay(10);                        //Delay 10ms for the elimination of key leading-edge jitter
-    if (digitalRead(pin) == LOW)   //Confirm button is pressed
-    {
-      while (digitalRead(pin) == LOW); //Wait for key interfaces to low
-      delay(10);                      //delay 10ms for the elimination of key trailing-edge jitter
-      while (digitalRead(pin) == LOW); //Confirm button press
-      return true;
-    }
-  } else {
-    return false;
+boolean readPressedAsBoolean(int pin){
+  if(pin==start_stop_btn_pin){
+    return analogRead(pin) > 800;
+  }else{
+    return digitalRead(pin)==LOW;
   }
 }
+
