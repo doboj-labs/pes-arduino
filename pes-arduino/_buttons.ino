@@ -7,8 +7,9 @@
   Date: 2017-01-23
 ******************************************************/
 void listenStartStop() {
-  if (isButtonPressed(start_stop_btn_pin)) {
-    startStopMatch();
+  if (isAnalogButtonPressed(start_stop_btn_pin)) {
+    //startStopMatch();
+    Serial.println("start/stop");
   }
 }
 
@@ -18,7 +19,7 @@ void listenScoreButtons() {
     return;
   }
 
-  for (byte b = 0; b < 4; b++) {
+  for (byte b = 0; b < 2; b++) {
     byte  pin = score_pins[b];
     // Check first if button is pressed
     if (isButtonPressed(pin)) {
@@ -35,10 +36,26 @@ void listenScoreButtons() {
           break;
           //Continue for other pins
       }
-      update_web_score(request_id);
+     // update_web_score(request_id);
     }
   }
 
+}
+
+boolean isAnalogButtonPressed(int pin) {
+  if (analogRead(pin) >800)       //Detection button interface to low
+  {
+    delay(10);                        //Delay 10ms for the elimination of key leading-edge jitter
+    if (analogRead(pin) >800)   //Confirm button is pressed
+    {
+      while (analogRead(pin) >800); //Wait for key interfaces to low
+      delay(10);                      //delay 10ms for the elimination of key trailing-edge jitter
+      while (analogRead(pin) >800); //Confirm button press
+      return true;
+    }
+  } else {
+    return false;
+  }
 }
 
 boolean isButtonPressed(int pin) {

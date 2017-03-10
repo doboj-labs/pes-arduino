@@ -41,7 +41,7 @@
 LiquidCrystal_I2C lcd(0x3f, 16, 2); // set the LCD address to "0x3f"(or "0x27") for a 16 chars and 2 line display
 const byte hs_btn_pin = 2; // button for home score
 const byte as_btn_pin = 5; // button for away score
-const byte start_stop_btn_pin = 10; // button for starting/stopping match
+const byte start_stop_btn_pin = A0; // button for starting/stopping match
 const byte score_pins[] = {hs_btn_pin, as_btn_pin};
 
 // WiFi/Web
@@ -66,7 +66,7 @@ String line_2;
 const char status_active[] = "active";
 const char status_label[] = "Status";
 const char welcome[] = "Welcome!";
-const char version[] = "pes-arduino v0.2";
+const char version[] = "Jim Beglin v2000";
 
 byte home_score = 0;
 byte away_score = 0;
@@ -81,7 +81,7 @@ void setup(void)
   initHardware();
 
   // init webservices
-  getCurrentMatch();
+  //getCurrentMatch();
 
   // ms = millis(); // for butonlessTest
 }
@@ -89,26 +89,6 @@ void setup(void)
 void loop(void)
 {
   printLcd();
-  //listenStartStop();
+  listenStartStop();
   //listenScoreButtons();
-
-  // buttonlessTest();
 }
-
-void buttonlessTest() {
-
-  if (millis() - ms > 4000) {
-
-    Serial.println("next call");
-    int random_id = random(6);
-    if (random_id < 2) {
-      startStopMatch();
-    } else if (random_id > 1) {
-      update_web_score(random_id);
-    }
-    ms = millis();
-  }
-}
-
-
-

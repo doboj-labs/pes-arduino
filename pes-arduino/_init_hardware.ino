@@ -9,8 +9,7 @@
 ******************************************************/
 void  initHardware() {
   initLcd();
-  initWifi();
-  // initButtons();
+  //initWifi();
 }
 
 
@@ -21,12 +20,6 @@ void initLcd() {
   line_1 = welcome;
   line_2 = version;
   printLcd();
-}
-
-void initButtons() {
-  pinMode(start_stop_btn_pin, INPUT_PULLUP);
-  pinMode(hs_btn_pin, INPUT_PULLUP);
-  pinMode(as_btn_pin, INPUT_PULLUP);
 }
 
 void initWifi() {
