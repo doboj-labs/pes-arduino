@@ -8,15 +8,19 @@
 ******************************************************/
 void listenStartStop() {
   if (isButtonPressed(start_stop_btn_pin)) {
-    //startStopMatch();
-    Serial.println("start/stop");
+    if (line_2 != status_active) {
+      line_2 = "Match started.";
+    }else{
+      line_2 = "Match finished.";
+    }
+    startStopMatch();
   }
 }
 
 void listenScoreButtons() {
   // Score can be changed only when the match is active
   if (line_2 != status_active) {
-   // return;
+   return;
   }
 
   for (byte b = 0; b < 4; b++) {
@@ -29,29 +33,31 @@ void listenScoreButtons() {
         case hs_btn_pin:
           home_score++;
           request_id = WS_INCREASE_HOME;
-          Serial.print("home score ");
-          Serial.println(home_score);
+          line_2 = "HOME scored!!!";
           break;
         case as_btn_pin:
           away_score++;
           request_id = WS_INCREASE_AWAY;
-          Serial.print("away score");
-          Serial.println(away_score);
+          line_2 = "AWAY scored!!!";
           break;
         case hs_btn_cancel_pin:
+          if (home_score<1){
+            return;
+          }
           home_score--;
           request_id = WS_DECREASE_HOME;
-          Serial.print("home cancel");
-          Serial.println(home_score);
+          line_2 = "HOME canceled!!!";
           break;
         case as_btn_cancel_pin:
+          if(away_score<1){
+            return;
+          }
           away_score--;
           request_id = WS_DECREASE_AWAY;
-          Serial.print("away cancel");
-          Serial.println(away_score);
+          line_2 = "AWAY canceled!!!";
           break;
       }
-     // update_web_score(request_id);
+     update_web_score(request_id);
     }
   }
 

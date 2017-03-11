@@ -21,6 +21,9 @@ void startStopMatch() {
 }
 
 void makeRequest(int request_id) {
+  line_1 = status_label;
+  lcd.clear();
+  printLcd();
   response_line = 0;
 
   if (!client.connect(host, httpPort)) {
@@ -86,12 +89,11 @@ void makeRequest(int request_id) {
         line_2 = (const char*)responseJson["match_status"];
         home_score = responseJson["home"];
         away_score = responseJson["away"];
-        lcd.clear();
       }
     }
 
     response_line++;
   }
-
+  lcd.clear();
 }
 

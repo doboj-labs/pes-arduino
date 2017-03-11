@@ -9,7 +9,7 @@
 ******************************************************/
 void  initHardware() {
   initLcd();
-  //initWifi();
+  initWifi();
 }
 
 
