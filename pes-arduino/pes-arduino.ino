@@ -67,7 +67,6 @@ String line_2;
 // Status
 const char status_active[] = "active";
 const char status_label[] = "Status";
-const char status_syncing[] = "SYNC";
 const char welcome[] = "Welcome!";
 const char version[] = "Jim Beglin v2000";
 
