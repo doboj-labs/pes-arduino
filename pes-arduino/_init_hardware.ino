@@ -20,6 +20,7 @@ void initLcd() {
   line_1 = welcome;
   line_2 = version;
   printLcd();
+  delay(3000);
 }
 
 void initWifi() {
@@ -28,7 +29,7 @@ void initWifi() {
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     line_1 = status_label;
-    line_2 = "init wifi...";
+    line_2 = "WiFi: "+ (String)ssid;
     lcd.clear();
     printLcd();
   }
